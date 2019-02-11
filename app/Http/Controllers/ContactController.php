@@ -51,15 +51,19 @@ class ContactController extends Controller
         if ($validate->fails()) {
             return redirect()->back()->with('errors', $validate->errors());
         }
-        // $contact = Contact::create($data);
-        $contact = new Contact();
-        $contact->name = $data['name'];
-        $contact->phone = $data['phone'];
-        $contact->save();
+        try {
+            // $contact = Contact::create($data);
+            $contact = new Contact();
+            $contact->name = $data['name'];
+            $contact->phone = $data['phone'];
+            $contact->save();
 
-        \Session::flash('success', 'Saved Successfully!');
+            \Session::flash('success', 'Saved Successfully!');
 
-        return redirect()->back();
+            return redirect()->back();
+        } catch (Exception $e) {
+            return redirect()->back()->with('errors', $e->getMessage);
+        }
     }
 
     /**
